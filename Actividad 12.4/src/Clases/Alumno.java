@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 
 public class Alumno {
+
+
     private static String [] asignaturas = {
             "Programacion",
             "Bases de Datos",
@@ -46,6 +48,10 @@ public class Alumno {
         return asignaturas;
     }
 
+    public static String getAsignaturas(int i){
+        return asignaturas[i];
+    }
+
     public static void setAsignaturas(String[] asignaturas) {
         Alumno.asignaturas = asignaturas;
     }
@@ -82,9 +88,13 @@ public class Alumno {
         this.notas = notas;
     }
 
+    public static int getTrimestres() {
+        return trimestres;
+    }
+
     @Override
     public String toString() {
-        String r = "Alumno: "+ nombre + ", " + apellidos +
+        String r = "Alumno: "+ apellidos + ", " + nombre +
                 "\nCiudad nacimiento: " + ciudad_nacimiento +
                 "\nNotas:\n";
         for (int i = 0; i < asignaturas.length; i++) {
@@ -94,6 +104,11 @@ public class Alumno {
             }
             r = r + "\n";
         }
+        return r;
+    }
+    public String toStringNombreApe() {
+        String r = "Alumno: "+ apellidos + ", " + nombre;
+
         return r;
     }
 }

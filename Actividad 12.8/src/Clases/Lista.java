@@ -26,21 +26,23 @@ public class Lista {
         }
     }
 
-    public void insertar(Alumno a) {
+    public void insertar(Contacto a) {
         Nodo nuevo = new Nodo(a);
         insertar(nuevo);
     }
 
 
-    public void borrar(Nodo nodo) {
+    public boolean borrar(Nodo nodo) {
+        boolean borrado = false;
         if (this.primero != null) {
-            if (this.primero.getAlumno().equals(nodo.getAlumno())) {
+            if (this.primero.getContacto().equals(nodo.getContacto())) {
                 this.primero.getSiguiente().setAnterior(null);
                 this.primero = this.primero.getSiguiente();
+                borrado = true;
             } else {
                 Nodo iNodo = this.primero;
                 while (iNodo != null) {
-                    if (iNodo.getAlumno().equals(nodo.getAlumno())) {
+                    if (iNodo.getContacto().equals(nodo.getContacto())) {
                         try {
                             iNodo.getAnterior().setSiguiente(iNodo.getSiguiente());
                         } catch (NullPointerException e) {
@@ -50,39 +52,35 @@ public class Lista {
                         } catch (NullPointerException e) {
                         }
                         iNodo = null;
+                        borrado = true;
                     } else
                         iNodo = iNodo.getSiguiente();
                 }
             }
         }
+        return borrado;
     }
 
-    public void borrar(Alumno a) {
+    public boolean borrar(Contacto a) {
         Nodo nodo = new Nodo(a);
-        borrar(nodo);
+        return borrar(nodo);
     }
 
-    public Nodo busca(Nodo nodo) {
-        Nodo respuesta = null;
+    public Lista busca(String s) {
+        Lista respuesta = new Lista();
         if (this.primero != null) {
             Nodo iNodo = this.primero;
             while (iNodo != null) {
-                if (iNodo.comparaAlumno(nodo)) {
-                    respuesta = iNodo;
-                    iNodo = null;
-                } else
-                    try {
-                        iNodo = iNodo.getSiguiente();
-                    } catch (NullPointerException e) {
-                    }
+                if (iNodo.comparaContacto(s)) {
+                    respuesta.insertar(iNodo.getContacto());
+                }
+                try {
+                    iNodo = iNodo.getSiguiente();
+                } catch (NullPointerException e) {
+                }
             }
         }
         return respuesta;
-    }
-
-    public Alumno busca(Alumno alumno) {
-        Nodo nuevo = new Nodo(alumno);
-        return this.busca(nuevo).getAlumno();
     }
 
 
@@ -93,24 +91,24 @@ public class Lista {
 
         do {
             ordenado = true;
-            String ape1 = iNodo.getAlumno().getApellidos();  //almacenamos los apellidos del Nodo iterado y del siguiente para trabajar mas comodamente
+            String ape1 = iNodo.getContacto().getApellido();  //almacenamos los apellidos del Nodo iterado y del siguiente para trabajar mas comodamente
             try {
-                String apeSig = iNodo.getSiguiente().getAlumno().getApellidos();
+                String apeSig = iNodo.getSiguiente().getContacto().getApellido();
 
                 if (ape1.equalsIgnoreCase(apeSig)) {  //si los apellidos son iguales se pasa a evaluar los nombres de la misma manera
-                    String nombre1 = iNodo.getAlumno().getNombre();
-                    String nombreSig = iNodo.getSiguiente().getAlumno().getNombre();
+                    String nombre1 = iNodo.getContacto().getNombre();
+                    String nombreSig = iNodo.getSiguiente().getContacto().getNombre();
 
                     if (nombre1.compareToIgnoreCase(nombreSig) < 0 == false) { //en el caso de que no esten en el orden correcto se intercambian los alumnos de nodo
-                        Alumno aux = iNodo.getSiguiente().getAlumno();
-                        iNodo.getSiguiente().setAlumno(iNodo.getAlumno());
-                        iNodo.setAlumno(aux);
+                        Contacto aux = iNodo.getSiguiente().getContacto();
+                        iNodo.getSiguiente().setContacto(iNodo.getContacto());
+                        iNodo.setContacto(aux);
                         ordenado = false; // si no hay ningun cambio, la lista esta ordenada y acaba el bucle
                     }
                 } else if (ape1.compareToIgnoreCase(apeSig) < 0 == false) { //en el caso de que no esten en el orden correcto se intercambian los alumnos de nodo
-                    Alumno aux = iNodo.getSiguiente().getAlumno();
-                    iNodo.getSiguiente().setAlumno(iNodo.getAlumno());
-                    iNodo.setAlumno(aux);
+                    Contacto aux = iNodo.getSiguiente().getContacto();
+                    iNodo.getSiguiente().setContacto(iNodo.getContacto());
+                    iNodo.setContacto(aux);
                     ordenado = false; // si no hay ningun cambio, la lista esta ordenada y acaba el bucle
                 }
                 if (ordenado) // si la lista esta ordenada hasta ahora,
@@ -123,14 +121,14 @@ public class Lista {
         } while (!ordenado || !fin);
     }
 
-    public Alumno getAlumno(int i) {
+    public Contacto getContacto(int i) {
         int cont = 1;
-        Alumno respuesta = null;
+        Contacto respuesta = null;
         if (this.primero != null) {
             Nodo iNodo = this.primero;
             while (iNodo != null && cont <= i) {
                 if (cont == i) {
-                    respuesta = iNodo.getAlumno();
+                    respuesta = iNodo.getContacto();
                     iNodo = null;
                 } else {
                     cont++;
@@ -143,25 +141,22 @@ public class Lista {
 
 
     public String toString() {
-        String r = "\n";
-        Nodo iNodo = new Nodo(this.primero);
-        while (iNodo != null) {
-            r = r + iNodo.getAlumno().toString() + "\n _ _ _ _ _ _\n\n";
-            iNodo = iNodo.getSiguiente();
-        }
+        String r = "Lista vacia.";
+        if (this.primero != null) {
+            r = "\n";
+            Nodo iNodo = new Nodo(this.primero);
+            int cont = 1;
+            while (iNodo != null) {
+                r = r + cont + ". _ _ _ _ _" +
+                        "\n\tNombre: " + iNodo.getContacto().getNombre() +
+                        "\n\tApellidos: " + iNodo.getContacto().getApellido() +
+                        "\n\tTelefono: " + iNodo.getContacto().getTelefono() +
+                        "\n\tEmail: " + iNodo.getContacto().getMail() +
+                        "\n\n";
 
-        return r;
-
-    }
-
-    public String toStringNombre() {
-        String r = "\n";
-        Nodo iNodo = new Nodo(this.primero);
-        int cont = 1;
-        while (iNodo != null) {
-            r = r + cont + ". "+ iNodo.getAlumno().toStringNombreApe() + "\n";
-            iNodo = iNodo.getSiguiente();
-            cont++;
+                iNodo = iNodo.getSiguiente();
+                cont++;
+            }
         }
 
         return r;

@@ -38,4 +38,12 @@ public class Nodo {
     public void setAnterior(Nodo anterior) {
         this.anterior = anterior;
     }
+
+    public boolean comparaAlumno(Nodo otro){
+        boolean r = false;
+        if (this.getAlumno().equals(otro.getAlumno()))
+            r = true;
+
+        return r;
+    }
 }

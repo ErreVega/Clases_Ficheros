@@ -17,7 +17,7 @@ public class Main12_4 {
 
 
         Alumno a1 = new Alumno("Jorge", "Lopez", "Madrid", notas1);
-        Alumno a2 = new Alumno("Paco", "Garcia", "Barcelona", notas2);
+        Alumno a2 = new Alumno("Santiago", "Cabanillas", "Barcelona", notas2);
         Alumno a3 = new Alumno();
         a3.setNotas(notas3);
         Alumno a4 = new Alumno("Paco", "Cabanillas", "Barcelona", notas2);
